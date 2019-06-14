@@ -1,4 +1,4 @@
 <resources>
     <string name="Some key">Some value %2$s</string>
-    <string name="Some keyp">Some value %s</string>
+    <string name="Some keyp">Some value %s //n</string>
 </resources>

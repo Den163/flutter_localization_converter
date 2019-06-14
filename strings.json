@@ -1,5 +1,6 @@
 {
     "Bad key": "SS",
-    "Some key": "Some value $s2",
-    "Some key_": "Хкукыфав привет"
+    "Some key": "Some value $s2$",
+    "Some key_": "Хкукыфав привет",
+    "Some keyp": "Some value $s /n"
 }

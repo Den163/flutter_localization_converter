@@ -8,8 +8,6 @@ from collections import OrderedDict
 
 from typing import List, Dict, Tuple, AnyStr
 
-# TODO - Fix //n to /n parsing
-
 def log(s) : 
     print(s)
 
@@ -103,7 +101,7 @@ def parseXmlFile(fileName: str) -> Dict[str, str]:
     return values
 
 def fixValue(value: str) -> str:
-    newValue = re.sub(r"%(([0-9]\$)?)s", r"$s\1", value)
+    newValue: str = re.sub(r"%(([0-9]\$)?)s", r"$s\1", value).replace("//n", "/n")
     if value != newValue: log(f"Fixed value from `{value}` to `{newValue}`")
     return newValue
 
