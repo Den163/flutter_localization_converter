@@ -8,6 +8,9 @@ from collections import OrderedDict
 
 from typing import List, Dict, Tuple, AnyStr
 
+def log(s) : 
+    print(s)
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Transforms android xml localization file to flutter arb")
@@ -20,8 +23,17 @@ def main() -> None:
         help="Optional output file name",
         dest='o'
     )
+    parser.add_argument(
+        "-v",
+        action="store_true",
+        help="Prints verbose info about parsing process",
+        dest='v'
+    )
 
     args = parser.parse_args()
+    if not args.v: 
+        global log 
+        log = lambda f: None
     outputName: str = args.o or "string.json"
     strings = {}
 
@@ -31,20 +43,22 @@ def main() -> None:
         checkFilename(name)
 
     for name in filesToUse:
-        print(f"Trying parse `{name}`")
+        log(f"Trying parse `{name}`")
         parsedStrings = parseXmlFile(name)
         
         if len(parsedStrings.keys()) == 0: continue
         fixCollisions(strings, parsedStrings)
         strings.update(parsedStrings)
 
-    print("Parsing is successful. Convert to json")
+    log("Parsing is successful. Convert to json")
 
     strings = OrderedDict(sorted(strings.items(), key=lambda t: t[0]))
     jsonString = json.dumps(strings, ensure_ascii=False, indent=4)
 
     fileToWrite = open(outputName, "w", encoding='utf-8')
     fileToWrite.write(jsonString)
+
+
 
 def findFiles(fileNames: List[str]) -> List[str]:
     matchedFiles: List[str] = []
@@ -82,13 +96,13 @@ def parseXmlFile(fileName: str) -> Dict[str, str]:
             values[key] = fixValue(value)
 
     except Exception:
-        print(f"`{fileName}` is empty or format is incorrect. Skip it")
+        log(f"`{fileName}` is empty or format is incorrect. Skip it")
         
     return values
 
 def fixValue(value: str) -> str:
     newValue = re.sub(r"%([0-9])\$s", r"$s\1", value)
-    print(f"From {value} to {newValue}")
+    if value != newValue: log(f"Fixed value from `{value}` to `{newValue}`")
     return newValue
 
 def fixCollisions(leftDict: Dict[str, str], rigthDict: Dict[str, str]):
@@ -99,7 +113,7 @@ def fixCollisions(leftDict: Dict[str, str], rigthDict: Dict[str, str]):
             oldValue = rigthDict.pop(k)
             newKey = k + '_'
             rigthDict[newKey] = oldValue
-            print(f"Collision with key `{k}`. Fixing it to `{newKey}`")
+            log(f"Collision with key `{k}`. Fixing it to `{newKey}`")
 
 # Main program
 

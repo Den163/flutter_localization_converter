@@ -13,5 +13,7 @@ A simple python script, that converts android native localization .xml files to 
   2. Type ```python converter.py strings``` (or any file names that contains xml to parse). Look at strings.json for a result.
   
   You can use optional ```-o``` parameter to set output file name (before input file names).
+  You can use optional ```-v``` parameter to print all information about parsing process
+  
   Please type ```pyhton converter.py -h``` for additional info
   
