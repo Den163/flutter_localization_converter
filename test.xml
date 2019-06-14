@@ -1,0 +1,3 @@
+<resources>
+    <string name="Some key">Some value %2$s</string>
+</resources>
