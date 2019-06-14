@@ -100,7 +100,7 @@ def parseXmlFile(fileName: str) -> Dict[str, str]:
     return values
 
 def fixValue(value: str) -> str:
-    newValue: str = re.sub(r"%(([0-9]\$)?)s", r"$s\1", value)
+    newValue: str = re.sub(r"%(([0-9])\$)?s", r"$s\2", value)
     if value != newValue: log(f"Fixed value from `{value}` to `{newValue}`")
     return newValue
 
