@@ -10,13 +10,19 @@ from typing import List, Dict, Tuple, AnyStr
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Transform android xml localization file to flutter arb")
+        description="Transforms android xml localization file to flutter arb")
     parser.add_argument(
         "fileNames", 
-        help="Xml relative path to file to parse",
+        help="Names of files that you want to convert from xml to json (Can be substrings of file names)",
         nargs="+")
+    parser.add_argument(
+        "-o",
+        help="Optional output file name",
+        dest='o'
+    )
 
     args = parser.parse_args()
+    outputName: str = args.o or "string.json"
     strings = {}
 
     filesToUse: List[str] = findFiles(args.fileNames)
@@ -37,7 +43,7 @@ def main() -> None:
     strings = OrderedDict(sorted(strings.items(), key=lambda t: t[0]))
     jsonString = json.dumps(strings, ensure_ascii=False, indent=4)
 
-    fileToWrite = open("strings.json", "w", encoding='utf-8')
+    fileToWrite = open(outputName, "w", encoding='utf-8')
     fileToWrite.write(jsonString)
 
 def findFiles(fileNames: List[str]) -> List[str]:
